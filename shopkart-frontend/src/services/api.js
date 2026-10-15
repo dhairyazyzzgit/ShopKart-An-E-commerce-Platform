@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-// Ensure trailing slash isn't duplicated and fallback directly to live Render backend
-const RENDER_BACKEND_URL = 'https://shopkart-backend-90ix.onrender.com';
-const API_URL = import.meta.env.VITE_API_URL || RENDER_BACKEND_URL;
+// Clean the environment variable or fallback to prevent relative URL prepending
+const rawUrl = import.meta.env.VITE_API_URL || 'https://shopkart-backend-90ix.onrender.com';
+const API_URL = rawUrl.replace(/[\[\]'"]/g, '').trim().replace(/\/$/, '');
 
 const API = axios.create({
   baseURL: API_URL,
-  withCredentials: true // sends the JWT cookie to protected endpoints
+  withCredentials: true
 });
 
 // Interceptor to handle unauthenticated sessions cleanly without crashing
