@@ -40,8 +40,8 @@ ShopKart/
     ├── seed.js              # Database seeder script
     ├── server.js            # Entry point
     └── package.json
-
-    ⚙️ Setup and Installation Instructions
+```
+  #⚙️ Setup and Installation Instructions
 Prerequisites
 Node.js (v18+ recommended) installed on your machine.
 
