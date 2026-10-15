@@ -19,7 +19,14 @@ export default function Products() {
       setError('');
       try {
         const res = await productAPI.getAll(search, category, sort);
-        if (active) setProducts(res.data.products);
+        if (active) {
+          // Safely handle whether backend returns an array or an object containing products
+          const data = res.data;
+          const productList = Array.isArray(data) 
+            ? data 
+            : (data?.products || data?.data || []);
+          setProducts(productList);
+        }
       } catch (err) {
         if (active) setError(getErrorMessage(err, 'Something went wrong while loading products.'));
       } finally {
@@ -34,7 +41,7 @@ export default function Products() {
 
   return (
     <div className="page">
-            <section className="hero">
+      <section className="hero">
         <span className="hero-tag">✨ New season deals</span>
         <h1>Shop smarter,<br />live better.</h1>
         <p>Electronics, fashion and books — delivered to your door.</p>
@@ -55,7 +62,7 @@ export default function Products() {
 
       {!loading && !error && products.length > 0 && (
         <div className="grid">
-          {products.map((p) => <ProductCard key={p._id} product={p} />)}
+          {products.map((p) => <ProductCard key={p._id || p.id} product={p} />)}
         </div>
       )}
     </div>

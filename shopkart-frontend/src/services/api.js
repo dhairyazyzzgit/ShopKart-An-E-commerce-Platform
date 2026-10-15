@@ -1,11 +1,15 @@
 import axios from 'axios';
 
+// Ensure trailing slash isn't duplicated and fallback directly to live Render backend
+const RENDER_BACKEND_URL = 'https://shopkart-backend-90ix.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || RENDER_BACKEND_URL;
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  baseURL: API_URL,
   withCredentials: true // sends the JWT cookie to protected endpoints
 });
 
-// If the session expires, tell the AuthContext so the UI logs the user out cleanly.
+// Interceptor to handle unauthenticated sessions cleanly without crashing
 API.interceptors.response.use(
   (res) => res,
   (err) => {
